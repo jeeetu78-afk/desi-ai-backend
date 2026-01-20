@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Desi AI 😄</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>😂 Desi AI Chat</h2>
+
+<input id="text" placeholder="Bhai kuch likh..." />
+<button onclick="send()">Bolo</button>
+
+<p id="reply"></p>
+
+<script src="script.js"></script>
+</body>
+</html>
