@@ -1,11 +1,14 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from pydantic import BaseModel
 import random
 
-app = FastAPI(
-    title="Desi AI 🤖",
-    description="Full Desi Style AI Backend 😄☕",
-    version="1.0"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # GitHub Pages allow
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class TextInput(BaseModel):
