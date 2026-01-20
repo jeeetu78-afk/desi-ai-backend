@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Desi AI 🤖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      background: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #reply {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>😄 Desi AI</h2>
+  <input id="text" placeholder="Bhai kuch bol..." />
+  <br>
+  <button onclick="talk()">Bol Bhai</button>
+  <div id="reply"></div>
+
+<script>
+function talk() {
+  let userText = document.getElementById("text").value;
+
+  fetch("https://desi-ai-backend.onrender.com/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ text: userText })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("reply").innerText = data.reply;
+  });
+}
+</script>
+
+</body>
+</html>
