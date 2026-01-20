@@ -1,22 +1,22 @@
 async function send() {
   let text = document.getElementById("text").value;
-
   document.getElementById("reply").innerText = "🤖 Desi AI soch raha hai...";
 
   try {
-    const response = await fetch("https://YOUR_RENDER_URL.onrender.com/generate", {
+    const res = await fetch("https://YOUR_RENDER_URL.onrender.com/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ prompt: text })
+      body: JSON.stringify({ text: text })
     });
 
-    const data = await response.json();
-    document.getElementById("reply").innerText = "😂 Desi AI: " + data.reply;
-
-  } catch (error) {
+    const data = await res.json();
     document.getElementById("reply").innerText =
-      "❌ Error: Backend connect nahi ho raha";
+      "😂 Desi AI: " + data.reply;
+
+  } catch (err) {
+    document.getElementById("reply").innerText =
+      "❌ Backend se connect nahi ho raha";
   }
 }
