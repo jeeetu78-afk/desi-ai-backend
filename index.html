@@ -1,97 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>😂 Desi AI Chat</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f2f2f2;
-    }
-    #chatBox {
-      max-width: 500px;
-      margin: 20px auto;
-      background: white;
-      padding: 10px;
-      height: 400px;
-      overflow-y: auto;
-      border-radius: 8px;
-    }
-    .user {
-      text-align: right;
-      margin: 5px;
-      color: blue;
-    }
-    .ai {
-      text-align: left;
-      margin: 5px;
-      color: green;
-    }
-    #inputArea {
-      max-width: 500px;
-      margin: auto;
-      display: flex;
-      gap: 5px;
-    }
-    input {
-      flex: 1;
-      padding: 8px;
-    }
-    button {
-      padding: 8px 12px;
-    }
-  </style>
+  <title>Desi AI Chat</title>
 </head>
-
 <body>
 
-<h2 style="text-align:center">😂 Desi AI Chat</h2>
+<h2>😂 Desi AI Chat</h2>
 
-<div id="chatBox"></div>
+<input id="msg" placeholder="Message likho" />
+<button onclick="send()">Send</button>
 
-<div id="inputArea">
-  <input id="userInput" placeholder="Kuch bolo bhai..." />
-  <button onclick="sendMessage()">Send</button>
-</div>
+<div id="chat"></div>
 
 <script>
-async function sendMessage() {
-  const inputBox = document.getElementById("userInput");
-  const chatBox = document.getElementById("chatBox");
-  const text = inputBox.value.trim();
+async function send() {
+  const msg = document.getElementById("msg").value;
 
-  if (!text) return;
+  const res = await fetch(
+    "https://desi-ai-backend-1.onrender.com/chat",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    }
+  );
 
-  // 👤 User message
-  chatBox.innerHTML += `<div class="user">🧑 ${text}</div>`;
-  chatBox.scrollTop = chatBox.scrollHeight;
-  inputBox.value = "";
+  const data = await res.json();
 
-  // 🤖 Thinking
-  chatBox.innerHTML += `<div class="ai">🤖 Soch raha hoon...</div>`;
-  chatBox.scrollTop = chatBox.scrollHeight;
+  document.getElementById("chat").innerHTML +=
+    "<p><b>You:</b> " + msg + "</p>" +
+    "<p><b>AI:</b> " + data.reply + "</p>";
 
-  try {
-    const response = await fetch(
-      "https://desi-ai-backend-1.onrender.com/chat",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
-      }
-    );
-
-    const data = await response.json();
-
-    // Last "thinking" remove
-    chatBox.lastElementChild.remove();
-
-    // 🤖 AI reply
-    chatBox.innerHTML += `<div class="ai">🤖 ${data.reply}</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-  } catch (err) {
-    chatBox.lastElementChild.innerText = "❌ AI offline hai";
-  }
+  document.getElementById("msg").value = "";
 }
 </script>
 
