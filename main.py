@@ -1,11 +1,13 @@
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import random
 
+app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # GitHub Pages allow
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -15,13 +17,12 @@ class TextInput(BaseModel):
     text: str
 
 desi_replies = [
-    "Arre bhai 😄 zindagi me itna mat soch, chai pee ☕",
+    "Arre bhai 😄 zindagi me itna mat soch",
     "Aye haye 😂 ye toh full desi problem hai",
-    "Bhai tu tension le raha hai, tension tujhe le rahi hai 😭",
-    "Shaanti rakho mitron, sab set ho jayega 😎",
-    "Bhai ye duniya gol hai, ghoom ke sab milta hai 🤝"
+    "Bhai tu tension le raha hai, tension tujhe le jayegi",
+    "Shaanti rakho mitron, sab set ho jayega",
+    "Bhai ye duniya gol hai, ghoom ke wahi aati hai"
 ]
-
 @app.get("/")
 def home():
     return {
@@ -29,10 +30,10 @@ def home():
         "status": "running"
     }
 
-@app.post("/generate")
-def generate(data: TextInput):
+@app.post("/chat")
+def chat(input: TextInput):
     reply = random.choice(desi_replies)
     return {
-        "input": data.text,
+        "question": input.text,
         "reply": reply
     }
