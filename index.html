@@ -1,45 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Desi AI Chat</title>
+  <title>😂 Desi AI Chat</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f2f2f2;
+    }
+    #chatBox {
+      max-width: 500px;
+      margin: 20px auto;
+      background: white;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      border-radius: 8px;
+    }
+    .user {
+      text-align: right;
+      margin: 5px;
+      color: blue;
+    }
+    .ai {
+      text-align: left;
+      margin: 5px;
+      color: green;
+    }
+    #inputArea {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      gap: 5px;
+    }
+    input {
+      flex: 1;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>😂 Desi AI Chat</h2>
+<h2 style="text-align:center">😂 Desi AI Chat</h2>
 
-<input id="userInput" placeholder="Type here..." />
-<button onclick="sendMessage()">Send</button>
+<div id="chatBox"></div>
 
-<p id="reply"></p>
+<div id="inputArea">
+  <input id="userInput" placeholder="Kuch bolo bhai..." />
+  <button onclick="sendMessage()">Send</button>
+</div>
 
-<!-- ✅ JavaScript YAHAN likho -->
 <script>
 async function sendMessage() {
-  const input = document.getElementById("userInput").value;
-  const replyBox = document.getElementById("reply");
+  const inputBox = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+  const text = inputBox.value.trim();
 
-  replyBox.innerText = "⏳ Soch raha hoon...";
+  if (!text) return;
+
+  // 👤 User message
+  chatBox.innerHTML += `<div class="user">🧑 ${text}</div>`;
+  chatBox.scrollTop = chatBox.scrollHeight;
+  inputBox.value = "";
+
+  // 🤖 Thinking
+  chatBox.innerHTML += `<div class="ai">🤖 Soch raha hoon...</div>`;
+  chatBox.scrollTop = chatBox.scrollHeight;
 
   try {
     const response = await fetch(
       "https://desi-ai-backend-1.onrender.com/chat",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ text: input })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
       }
     );
 
     const data = await response.json();
-    replyBox.innerText = data.reply;
 
-  } catch (error) {
-    replyBox.innerText = "❌ Backend se connect nahi ho raha";
-    console.error(error);
+    // Last "thinking" remove
+    chatBox.lastElementChild.remove();
+
+    // 🤖 AI reply
+    chatBox.innerHTML += `<div class="ai">🤖 ${data.reply}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+  } catch (err) {
+    chatBox.lastElementChild.innerText = "❌ AI offline hai";
   }
 }
 </script>
